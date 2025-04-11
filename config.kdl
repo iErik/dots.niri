@@ -38,7 +38,7 @@ input {
   focus-follows-mouse
   workspace-auto-back-and-forth
 
-  mod-key "Super"
+  //mod-key "Super"
 
   keyboard {
     xkb {
@@ -56,15 +56,12 @@ input {
   }
 
   mouse {
-    natural-scroll false
     accel-speed 0.0
     accel-profile "adaptive"
     scroll-factor 1.0
     //scroll-method "no-scroll"
     scroll-button 273
-
-    left-handed false
-    middle-emulation true
+    middle-emulation
   }
 }
 
@@ -91,8 +88,6 @@ layout {
   default-column-width { proportion 0.5; }
 
   border {
-    on
-
     width 2
   }
 
@@ -162,7 +157,7 @@ binds {
   Mod+Shift+9 { move-column-to-workspace 9; }
 
   Mod+F { maximize-column; }
-  Mod+Shift+F { fullscreen-window }
+  Mod+Shift+F { fullscreen-window; }
 
   Mod+Minus { set-column-width "-10%"; }
   Mod+Equal { set-column-width "+10%"; }
@@ -172,7 +167,7 @@ binds {
 
   Print { screenshot; }
 
-  Mod+Esc { quit; }
+  Mod+Escape { quit; }
   Ctrl+Alt+Delete { quit; }
 
   Mod+Shift+P { power-off-monitors; }
