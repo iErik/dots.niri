@@ -4,7 +4,7 @@ self: { pkgs, lib, config, ... }: let
   inherit (lib.hm.dag) entryAfter;
   inherit (config.home) username homeDirectory;
 
-  cfg = config.dots.nvim;
+  cfg = config.dots.niri;
   dotsDir = "${homeDirectory}/${cfg.directory}";
   xdgConfDir = "${homeDirectory}/.config/niri";
   repoUrl = "git@github.com:iErik/dots.niri.git";
@@ -14,7 +14,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable NeoVim Dotfiles module";
+      description = "Enable Niri's Dotfiles module";
     };
 
     cloneConfig = mkOption {
@@ -36,9 +36,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.neovim ];
+    home.packages = [ pkgs.niri ];
 
-    home.activation.nvimSetup = mkIf cfg.cloneConfig
+    home.activation.niriSetup = mkIf cfg.cloneConfig
       (entryAfter ["writeBoundary"] ''
         export PATH=${pkgs.openssh}/bin:$PATH
         export PATH=${pkgs.git}/bin:$PATH
