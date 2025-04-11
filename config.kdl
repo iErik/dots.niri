@@ -1,3 +1,39 @@
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "swaync"
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+
+environment {
+  DISPLAY ":0"
+  QT_AUTO_SCREEN_SCALE_FACTOR "1"
+  QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+  QT_QPA_PLATFORMTHEME "qt6ct"
+
+  GDK_BACKEND "wayland,x11,*"
+  SDL_VIDEODRIVER "wayland,x11"
+  CLUTTER_BACKEND "wayland,x11"
+
+  XDG_MENU_PREFIX "plasma-"
+  XDG_CURRENT_DESKTOP "Niri"
+  XDG_SESSION_DESKTOP "Niri"
+  XDG_SESSION_TYPE "wayland"
+  XCURSOR_SIZE "24"
+
+  LIBVA_DRIVER_NAME "nvidia"
+  GBM_BACKEND "nvidia-drm"
+  __GLX_VENDOR_LIBRARY_NAME "nvidia"
+  NVD_BACKEND "direct"
+}
+
+cursor {
+  xcursor-theme "Bibata-Rainbow-Original"
+  xcursor-size 24
+}
+
+clipboard {
+  disable-primary
+}
+
 input {
   focus-follows-mouse
   workspace-auto-back-and-forth
@@ -32,13 +68,21 @@ input {
   }
 }
 
-output "DP-2" { }
+output "HDMI-A-2" {
+  mode "2560x1080@60.0"
+  scale 1.0
+  focus-at-startup
+}
 
-output "DP-3" { }
+output "HDMI-A-1" {
+  mode "2560x1080@60.0"
+  transform "90"
+  scale 1.0
+}
 
-output "HDMI-A-1" { }
-
-output "HDMI-A-2" { }
+output "HDMI-A-4" {
+  mode "4096x2160@30"
+}
 
 
 layout {
