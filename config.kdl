@@ -66,28 +66,33 @@ input {
   }
 }
 
-output "HDMI-A-2" {
+output "DP-2" {
   mode "2560x1080@60.0"
   scale 1.0
   position x=0 y=0
   focus-at-startup
 }
 
-output "HDMI-A-1" {
+output "DP-3" {
   mode "2560x1080@60.0"
   position x=2560 y=-1080
   transform "270"
   scale 1.0
 }
 
-output "HDMI-A-4" {
-  mode "4096x2160@30"
+output "HDMI-A-1" {
+  mode "1920x1080@60.0"
+  position x=-2560 y=0
+}
+
+output "HDMI-A-2" {
+  mode "4096x2160@30.0"
   position x=3640 y=0
 }
 
 
 layout {
-  gaps 16
+  gaps 3
 
   center-focused-column "never"
 
