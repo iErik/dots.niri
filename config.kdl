@@ -1,10 +1,11 @@
-spawn-at-startup "xwayland-satellite"
+spawn-at-startup "xwayland-satellite :1"
 spawn-at-startup "swaync"
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+prefer-no-csd
 
 environment {
-  DISPLAY ":0"
+  DISPLAY ":1"
   QT_AUTO_SCREEN_SCALE_FACTOR "1"
   QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
   QT_QPA_PLATFORMTHEME "qt6ct"
@@ -23,6 +24,9 @@ environment {
   GBM_BACKEND "nvidia-drm"
   __GLX_VENDOR_LIBRARY_NAME "nvidia"
   NVD_BACKEND "direct"
+
+
+  ELECTRON_OZONE_PLATFORM_HINT "auto"
 }
 
 cursor {
@@ -36,19 +40,16 @@ clipboard {
 
 input {
   focus-follows-mouse
-  workspace-auto-back-and-forth
-
-  //mod-key "Super"
+  //workspace-auto-back-and-forth
+  mod-key "Super"
 
   keyboard {
     xkb {
-
       layout "us"
       variant "altgr-intl"
       model "pc86"
       options "compose:ralt,caps:escape"
       rules ""
-
     }
 
     repeat-rate 40
@@ -68,22 +69,27 @@ input {
 output "HDMI-A-2" {
   mode "2560x1080@60.0"
   scale 1.0
+  position x=0 y=0
   focus-at-startup
 }
 
 output "HDMI-A-1" {
   mode "2560x1080@60.0"
-  transform "90"
+  position x=2560 y=-1080
+  transform "270"
   scale 1.0
 }
 
 output "HDMI-A-4" {
   mode "4096x2160@30"
+  position x=3640 y=0
 }
 
 
 layout {
   gaps 16
+
+  center-focused-column "never"
 
   default-column-width { proportion 0.5; }
 
@@ -91,16 +97,44 @@ layout {
     width 2
   }
 
+  focus-ring {
+    off
+  }
+
   shadow {
+    on
+  }
+
+  tab-indicator {
+    //hide-when-single-tab
+    //place-within-column
+    position "bottom"
+    gap 2
+  }
+
+  insert-hint {
 
   }
+
+  struts { }
 }
 
 binds {
+  // 1.0 Spawn
+  // ---------
+
   Mod+Return { spawn "kitty"; }
-  Mod+D { spawn "rofi -matching fuzzy -show combi"; }
+  Mod+D {
+    spawn "rofi" "-matching" "fuzzy" "-show" "combi";
+  }
 
   Mod+Q { close-window; }
+
+  // 2.0 Movement
+  // ------------
+
+  // -> 2.1 Window Movement
+  // -------------------
 
   Mod+Left { focus-column-left; }
   Mod+Down { focus-window-down; }
@@ -126,6 +160,9 @@ binds {
   Mod+End { focus-column-last; }
   Mod+Ctrl+Home { move-column-to-first; }
   Mod+Ctrl+End { move-column-to-last; }
+
+  // -> 1.2 Monitor/Workspace Movement
+  // -----------------------------
 
   Mod+bracketleft { focus-monitor-left; }
   Mod+bracketright { focus-monitor-right; }
@@ -156,21 +193,35 @@ binds {
   Mod+Shift+8 { move-column-to-workspace 8; }
   Mod+Shift+9 { move-column-to-workspace 9; }
 
-  Mod+F { maximize-column; }
-  Mod+Shift+F { fullscreen-window; }
-
-  Mod+Minus { set-column-width "-10%"; }
-  Mod+Equal { set-column-width "+10%"; }
-
-  Mod+Shift+Minus { set-window-height "-10%"; }
-  Mod+Shift+Equal { set-window-height "+10%"; }
-
-  Print { screenshot; }
+  // 3.0 Actions
+  // -----------
 
   Mod+Escape { quit; }
   Ctrl+Alt+Delete { quit; }
 
   Mod+Shift+P { power-off-monitors; }
+
+  Print { screenshot; }
+
+  // 4.0 Layout
+  // ----------
+
+  Mod+W { toggle-column-tabbed-display; }
+  Mod+backslash { expel-window-from-column; }
+  Mod+Shift+backslash { consume-window-into-column; }
+
+  Mod+V { toggle-window-floating; }
+
+  Mod+C { center-column; }
+  Mod+F { maximize-column; }
+  Mod+Shift+F { fullscreen-window; }
+  Mod+apostrophe { expand-column-to-available-width; }
+
+  Mod+Minus { set-column-width "-5%"; }
+  Mod+Equal { set-column-width "+5%"; }
+
+  Mod+Shift+Minus { set-window-height "-5%"; }
+  Mod+Shift+Equal { set-window-height "+5%"; }
 }
 
 animations {
