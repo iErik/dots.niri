@@ -1,36 +1,36 @@
-spawn-at-startup "xwayland-satellite :1"
+//spawn-at-startup "/usr/bin/xwayland-satellite"
+//spawn-at-startup ""
+
+//spawn-at-startup "/usr/bin/otd-daemon"
+//spawn-at-startup "/usr/lib/huiontablet/huionCore -d &"
+
 spawn-at-startup "swaync"
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 prefer-no-csd
 
 environment {
-  DISPLAY ":1"
+  DISPLAY ":0"
   QT_AUTO_SCREEN_SCALE_FACTOR "1"
   QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
   QT_QPA_PLATFORMTHEME "qt6ct"
 
+  QT_QPA_PLATFORM "wayland"
   GDK_BACKEND "wayland,x11,*"
-  SDL_VIDEODRIVER "wayland,x11"
-  CLUTTER_BACKEND "wayland,x11"
+  SDL_VIDEODRIVER "wayland"
+  CLUTTER_BACKEND "wayland"
 
   XDG_MENU_PREFIX "plasma-"
-  XDG_CURRENT_DESKTOP "Niri"
-  XDG_SESSION_DESKTOP "Niri"
+  XDG_CURRENT_DESKTOP "niri"
+  XDG_SESSION_DESKTOP "niri"
   XDG_SESSION_TYPE "wayland"
   XCURSOR_SIZE "24"
-
-  LIBVA_DRIVER_NAME "nvidia"
-  GBM_BACKEND "nvidia-drm"
-  __GLX_VENDOR_LIBRARY_NAME "nvidia"
-  NVD_BACKEND "direct"
-
 
   ELECTRON_OZONE_PLATFORM_HINT "auto"
 }
 
 cursor {
-  xcursor-theme "Bibata-Rainbow-Original"
+  xcursor-theme "Bibata-Rainbow-Modern"
   xcursor-size 24
 }
 
@@ -53,7 +53,7 @@ input {
     }
 
     repeat-rate 40
-    repeat-delay 200
+    repeat-delay 300
   }
 
   mouse {
@@ -61,38 +61,53 @@ input {
     accel-profile "adaptive"
     scroll-factor 1.0
     //scroll-method "no-scroll"
-    scroll-button 273
-    middle-emulation
+    //scroll-button 273
+    //middle-emulation
+  }
+
+  trackpoint {
+  }
+
+  touchpad {
+  }
+
+  tablet {
+    //map-to-output "DP-2"
+    //calibration-matrix 1.0 1.0 1.0 1.0 1.0 1.0
+  }
+
+  touch {
+    //map-to-output "DP-2"
   }
 }
 
 output "DP-2" {
   mode "2560x1080@60.0"
   scale 1.0
-  position x=0 y=0
+  position x=1920 y=0
   focus-at-startup
 }
 
 output "DP-3" {
   mode "2560x1080@60.0"
-  position x=2560 y=-1080
+  position x=4480 y=-1080
   transform "270"
   scale 1.0
 }
 
 output "HDMI-A-1" {
   mode "1920x1080@60.0"
-  position x=-2560 y=0
+  position x=0 y=0
 }
 
 output "HDMI-A-2" {
   mode "4096x2160@30.0"
-  position x=3640 y=0
+  position x=5560 y=0
 }
 
 
 layout {
-  gaps 3
+  gaps 9
 
   center-focused-column "never"
 
@@ -133,6 +148,14 @@ binds {
     spawn "rofi" "-matching" "fuzzy" "-show" "combi";
   }
 
+  XF86AudioRaiseVolume {
+    spawn "pamixer" "--allow-boost" "-i" "5"
+  }
+
+  XF86AudioLowerVolume {
+    spawn "pamixer" "--allow-boost" "-d" "5"
+  }
+
   Mod+Q { close-window; }
 
   // 2.0 Movement
@@ -165,6 +188,8 @@ binds {
   Mod+End { focus-column-last; }
   Mod+Ctrl+Home { move-column-to-first; }
   Mod+Ctrl+End { move-column-to-last; }
+
+
 
   // -> 1.2 Monitor/Workspace Movement
   // -----------------------------
@@ -207,6 +232,7 @@ binds {
   Mod+Shift+P { power-off-monitors; }
 
   Print { screenshot; }
+  Mod+P { screenshot; }
 
   // 4.0 Layout
   // ----------
@@ -221,6 +247,8 @@ binds {
   Mod+F { maximize-column; }
   Mod+Shift+F { fullscreen-window; }
   Mod+apostrophe { expand-column-to-available-width; }
+  Mod+grave { toggle-overview; }
+  Mod+M { expand-column-to-available-width; }
 
   Mod+Minus { set-column-width "-5%"; }
   Mod+Equal { set-column-width "+5%"; }
