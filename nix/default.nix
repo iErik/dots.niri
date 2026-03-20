@@ -14,7 +14,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable NeoVim Dotfiles module";
+      description = "Enable Niri Dotfiles module";
     };
 
     cloneConfig = mkOption {
