@@ -39,7 +39,7 @@ in {
       default = "master";
       description =
         "The branch to use as source for the dotfiles";
-    }
+    };
   };
 
   config = mkIf cfg.enable {
