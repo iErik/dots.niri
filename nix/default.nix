@@ -4,7 +4,7 @@ self: { pkgs, lib, config, ... }: let
   inherit (lib.hm.dag) entryAfter;
   inherit (config.home) username homeDirectory;
 
-  cfg = config.dots.nvim;
+  cfg = config.dots.niri;
   dotsDir = "${homeDirectory}/${cfg.directory}";
   xdgConfDir = "${homeDirectory}/.config/niri";
   repoUrl = "git@github.com:iErik/dots.niri.git";
