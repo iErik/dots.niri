@@ -33,6 +33,13 @@ in {
         "store the dotfiles (relative to the " +
         "user's home directory).";
     };
+
+    branch = mkOption {
+      type = types.str;
+      default = "master";
+      description =
+        "The branch to use as source for the dotfiles";
+    }
   };
 
   config = mkIf cfg.enable {
@@ -50,12 +57,12 @@ in {
 
         if [ -d "${dotsDir}/.git" ];
         then
-          cd ${dotsDir} && git pull origin master
+          cd ${dotsDir} && git pull origin ${cfg.branch}
         else
           rm -rf ${dotsDir}
           rm -rf ${xdgConfDir}
 
-          git clone ${repoUrl} ${dotsDir}
+          git clone -b ${cfg.branch} --single-branch ${repoUrl} ${dotsDir}
 
           chown -R ${username}:users ${dotsDir}
           find ${dotsDir} -type d -exec chmod 744 {} \;
