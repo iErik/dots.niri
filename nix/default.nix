@@ -10,7 +10,7 @@ self: { pkgs, lib, config, ... }: let
   repoUrl = "git@github.com:iErik/dots.niri.git";
 
 in {
-  options.dots.nvim = {
+  options.dots.niri= {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -36,7 +36,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.neovim ];
+    home.packages = [
+      pkgs.neovim
+      pkgs.swaynotificationcenter
+    ];
 
     home.activation.nvimSetup = mkIf cfg.cloneConfig
       (entryAfter ["writeBoundary"] ''
