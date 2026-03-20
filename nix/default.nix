@@ -37,11 +37,10 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = [
-      pkgs.neovim
       pkgs.swaynotificationcenter
     ];
 
-    home.activation.nvimSetup = mkIf cfg.cloneConfig
+    home.activation.niriSetup = mkIf cfg.cloneConfig
       (entryAfter ["writeBoundary"] ''
         export PATH=${pkgs.openssh}/bin:$PATH
         export PATH=${pkgs.git}/bin:$PATH
