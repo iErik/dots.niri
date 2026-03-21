@@ -12,7 +12,7 @@
       default = self.homeManagerModules.dots;
       dots = import ./nix/default.nix self wallpapers;
       imports = [
-        wallpapers.homeManagerModules.default;
+        wallpapers.homeManagerModules.default
       ];
     };
   };
