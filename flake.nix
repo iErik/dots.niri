@@ -11,7 +11,9 @@
     homeManagerModules = {
       default = self.homeManagerModules.dots;
       dots = import ./nix/default.nix self wallpapers;
-      wallpapers.homeManagerModules.default;
+      imports = [
+        wallpapers.homeManagerModules.default;
+      ];
     };
   };
 }
