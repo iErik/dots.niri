@@ -231,6 +231,7 @@ in {
     };
 
     xdg.configFile."swaync/config.json".text = builtins.toJSON {
+      layer = "top";
       keyboard-shortcuts = false;
     };
 
@@ -265,6 +266,12 @@ in {
           Mod+Alt+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "folder"; }
         }
       '';
+
+    home.activation.swayncReload = entryAfter ["writeBoundary"] ''
+      if ${pkgs.procps}/bin/pgrep -x swaync > /dev/null; then
+        ${pkgs.swaynotificationcenter}/bin/swaync-client --reload-config
+      fi
+    '';
 
     home.activation.niriSetup = mkIf cfg.cloneConfig
       (entryAfter ["writeBoundary"] ''
