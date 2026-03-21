@@ -3,19 +3,18 @@
 DIRECTION="${1:?Usage: wallpaper-switch <next|prev> <image|folder>}"
 SCOPE="${2:?Usage: wallpaper-switch <next|prev> <image|folder>}"
 
-# Get focused output name
-FOCUSED_OUTPUT=$(niri msg focused-output -j | jq -r '.name')
+# Note: -j is a global flag for `niri msg`, not a subcommand flag
+FOCUSED_OUTPUT=$(niri msg -j focused-output | jq -r '.name')
 if [[ -z "$FOCUSED_OUTPUT" || "$FOCUSED_OUTPUT" == "null" ]]; then
   echo "wallpaper-switch: could not determine focused output" >&2
   exit 1
 fi
 
-# Get current wallpaper path on that output.
-# awww query -j returns: {"": [{name, ..., displaying: {path: "..."}}]}
-# .displaying.path is absent when only a color is showing.
+# awww query -j format: {"": [{name, ..., displaying: {image: "..."}}]}
+# .displaying.image is absent when only a color is showing
 CURRENT_PATH=$(awww query -j \
   | jq -r --arg out "$FOCUSED_OUTPUT" \
-    '.[""] | .[] | select(.name == $out) | .displaying.path // empty')
+    '.[""] | .[] | select(.name == $out) | .displaying.image // empty')
 
 # Print all leaf dirs (dirs that directly contain image files) under
 # WALLPAPERS_DIR, null-delimited and sorted. Handles paths with spaces.

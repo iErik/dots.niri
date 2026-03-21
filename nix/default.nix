@@ -20,6 +20,14 @@ self: wallpapers: { pkgs, lib, config, ... }: let
     '' + builtins.readFile ./wallpaper-switch.sh;
   };
 
+  wallpaperInitScript = pkgs.writeShellApplication {
+    name = "wallpaper-init";
+    runtimeInputs = [ pkgs.jq awwwPackage ];
+    text = ''
+      WALLPAPERS_DIR="${wallpapersPackage}"
+    '' + builtins.readFile ./wallpaper-init.sh;
+  };
+
 in {
   imports = [ wallpapers.homeManagerModules.default ];
 
@@ -72,7 +80,25 @@ in {
 
     home.packages = [
       pkgs.swaynotificationcenter
-    ] ++ lib.optionals cfg.wallpapers.enable [ wallpaperScript ];
+    ] ++ lib.optionals cfg.wallpapers.enable [
+      wallpaperScript
+      wallpaperInitScript
+    ];
+
+    systemd.user.services.wallpaper-init = mkIf cfg.wallpapers.enable {
+      Unit = {
+        Description = "Set a random wallpaper on session start";
+        After = [ "awww.service" "graphical-session.target" ];
+        PartOf = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${wallpaperInitScript}/bin/wallpaper-init";
+      };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
 
     home.file."Dots/Niri.dots/wallpaper-keys.kdl".text =
       lib.optionalString cfg.wallpapers.enable ''
