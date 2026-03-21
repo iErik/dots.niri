@@ -1,4 +1,4 @@
-self: { pkgs, lib, config, ... }: let
+self: wallpapers: { pkgs, lib, config, ... }: let
 
   inherit (lib) mkOption mkIf types;
   inherit (lib.hm.dag) entryAfter;
@@ -9,8 +9,21 @@ self: { pkgs, lib, config, ... }: let
   xdgConfDir = "${homeDirectory}/.config/niri";
   repoUrl = "git@github.com:iErik/dots.niri.git";
 
+  wallpapersPackage = wallpapers.packages.${pkgs.system}.wallpapers;
+  awwwPackage = wallpapers.inputs.awww.packages.${pkgs.system}.awww;
+
+  wallpaperScript = pkgs.writeShellApplication {
+    name = "wallpaper-switch";
+    runtimeInputs = [ pkgs.jq awwwPackage ];
+    text = ''
+      WALLPAPERS_DIR="${wallpapersPackage}"
+    '' + builtins.readFile ./wallpaper-switch.sh;
+  };
+
 in {
-  options.dots.niri= {
+  imports = [ wallpapers.homeManagerModules.default ];
+
+  options.dots.niri = {
     enable = mkOption {
       type = types.bool;
       default = false;
@@ -40,12 +53,36 @@ in {
       description =
         "The branch to use as source for the dotfiles";
     };
+
+    wallpapers = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable the Wallpapers module";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
+    dots.wallpapers = mkIf cfg.wallpapers.enable {
+      enable = true;
+      awww.enable = true;
+      location = "~/Dots/Wallpapers";
+    };
+
     home.packages = [
       pkgs.swaynotificationcenter
-    ];
+    ] ++ lib.optionals cfg.wallpapers.enable [ wallpaperScript ];
+
+    home.file."Dots/Niri.dots/wallpaper-keys.kdl".text =
+      lib.optionalString cfg.wallpapers.enable ''
+        binds {
+          Mod+Period { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "image"; }
+          Mod+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "image"; }
+          Mod+Alt+Period { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "folder"; }
+          Mod+Alt+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "folder"; }
+        }
+      '';
 
     home.activation.niriSetup = mkIf cfg.cloneConfig
       (entryAfter ["writeBoundary"] ''
@@ -75,4 +112,3 @@ in {
       '');
   };
 }
-

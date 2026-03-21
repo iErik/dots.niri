@@ -140,8 +140,8 @@ layout {
 }
 
 binds {
-  // 1.0 Spawn
-  // ---------
+  // 1.0 - Spawn
+  // -----------
 
   Mod+Return { spawn "kitty"; }
   Mod+D {
@@ -158,11 +158,11 @@ binds {
 
   Mod+Q { close-window; }
 
-  // 2.0 Movement
-  // ------------
+  // 2.0 - Movement
+  // --------------
 
-  // -> 2.1 Window Movement
-  // -------------------
+  // 2.1 - Window Movement
+  // ---------------------
 
   Mod+Left { focus-column-left; }
   Mod+Down { focus-window-down; }
@@ -189,10 +189,8 @@ binds {
   Mod+Ctrl+Home { move-column-to-first; }
   Mod+Ctrl+End { move-column-to-last; }
 
-
-
-  // -> 1.2 Monitor/Workspace Movement
-  // -----------------------------
+  // 1.2 - Monitor/Workspace Movement
+  // --------------------------------
 
   Mod+bracketleft { focus-monitor-left; }
   Mod+bracketright { focus-monitor-right; }
@@ -223,8 +221,8 @@ binds {
   Mod+Shift+8 { move-column-to-workspace 8; }
   Mod+Shift+9 { move-column-to-workspace 9; }
 
-  // 3.0 Actions
-  // -----------
+  // 3.0 - Actions
+  // -------------
 
   Mod+Escape { quit; }
   Ctrl+Alt+Delete { quit; }
@@ -234,8 +232,8 @@ binds {
   Print { screenshot; }
   Mod+P { screenshot; }
 
-  // 4.0 Layout
-  // ----------
+  // 4.0 - Layout
+  // ------------
 
   Mod+W { toggle-column-tabbed-display; }
   Mod+backslash { expel-window-from-column; }
@@ -264,3 +262,5 @@ animations {
 gestures {
 
 }
+
+include "wallpaper-keys.kdl"
