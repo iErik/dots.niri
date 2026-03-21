@@ -230,6 +230,10 @@ in {
       location = "~/Dots/Wallpapers";
     };
 
+    xdg.configFile."swaync/config.json".text = builtins.toJSON {
+      keyboard-shortcuts = false;
+    };
+
     home.packages = [
       pkgs.swaynotificationcenter
     ] ++ lib.optionals cfg.wallpapers.enable [
