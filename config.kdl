@@ -4,7 +4,7 @@
 //spawn-at-startup "/usr/bin/otd-daemon"
 //spawn-at-startup "/usr/lib/huiontablet/huionCore -d &"
 
-spawn-at-startup "swaync"
+spawn-at-startup "mako"
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 prefer-no-csd

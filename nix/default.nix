@@ -230,18 +230,8 @@ in {
       location = "~/Dots/Wallpapers";
     };
 
-    xdg.configFile."swaync/config.json".text = builtins.toJSON {
-      layer = "top";
-      keyboard-shortcuts = false;
-      # Disabling these two prevents swaync from setting
-      # GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE on notification popups,
-      # which is the actual cause of focus stealing (swaync bug, all versions).
-      notification-2fa-action = false;
-      notification-inline-replies = false;
-    };
-
     home.packages = [
-      pkgs.swaynotificationcenter
+      pkgs.mako
     ] ++ lib.optionals cfg.wallpapers.enable [
       wallpaperScript
       wallpaperInitScript
@@ -271,12 +261,6 @@ in {
           Mod+Alt+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "folder"; }
         }
       '';
-
-    home.activation.swayncReload = entryAfter ["writeBoundary"] ''
-      if ${pkgs.procps}/bin/pgrep -x swaync > /dev/null; then
-        ${pkgs.swaynotificationcenter}/bin/swaync-client --reload-config
-      fi
-    '';
 
     home.activation.niriSetup = mkIf cfg.cloneConfig
       (entryAfter ["writeBoundary"] ''
