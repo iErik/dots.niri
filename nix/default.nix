@@ -233,6 +233,11 @@ in {
     xdg.configFile."swaync/config.json".text = builtins.toJSON {
       layer = "top";
       keyboard-shortcuts = false;
+      # Disabling these two prevents swaync from setting
+      # GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE on notification popups,
+      # which is the actual cause of focus stealing (swaync bug, all versions).
+      notification-2fa-action = false;
+      notification-inline-replies = false;
     };
 
     home.packages = [
