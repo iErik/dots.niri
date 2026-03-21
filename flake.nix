@@ -9,13 +9,7 @@
 
   outputs = { self, nixpkgs, wallpapers }: {
     homeManagerModules = {
-      default = {
-        imports = [
-          self.homeManagerModules.dots
-          wallpapers.homeManagerModules.default
-        ];
-      };
-
+      default = self.homeManagerModules.dots;
       dots = import ./nix/default.nix self wallpapers;
     };
   };
