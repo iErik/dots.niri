@@ -220,6 +220,32 @@ in {
           '';
         };
       };
+
+      keybinds = {
+        nextImage = mkOption {
+          type = types.str;
+          default = "Mod+Period";
+          description = "Keybind for switching to the next wallpaper image.";
+        };
+
+        prevImage = mkOption {
+          type = types.str;
+          default = "Mod+Comma";
+          description = "Keybind for switching to the previous wallpaper image.";
+        };
+
+        nextFolder = mkOption {
+          type = types.str;
+          default = "Mod+Alt+Period";
+          description = "Keybind for switching to the next wallpaper folder.";
+        };
+
+        prevFolder = mkOption {
+          type = types.str;
+          default = "Mod+Alt+Comma";
+          description = "Keybind for switching to the previous wallpaper folder.";
+        };
+      };
     };
   };
 
@@ -253,14 +279,14 @@ in {
     };
 
     home.file."Dots/Niri.dots/wallpaper-keys.kdl".text =
-      lib.optionalString cfg.wallpapers.enable ''
+      lib.optionalString cfg.wallpapers.enable (with cfg.wallpapers.keybinds; ''
         binds {
-          Mod+Period { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "image"; }
-          Mod+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "image"; }
-          Mod+Alt+Period { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "folder"; }
-          Mod+Alt+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "folder"; }
+          ${nextImage} { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "image"; }
+          ${prevImage} { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "image"; }
+          ${nextFolder} { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "folder"; }
+          ${prevFolder} { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "folder"; }
         }
-      '';
+      '');
 
     home.activation.niriSetup = mkIf cfg.cloneConfig
       (entryAfter ["writeBoundary"] ''
