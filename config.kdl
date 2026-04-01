@@ -1,67 +1,168 @@
+//spawn-at-startup "/usr/bin/xwayland-satellite"
+//spawn-at-startup ""
+
+//spawn-at-startup "/usr/bin/otd-daemon"
+//spawn-at-startup "/usr/lib/huiontablet/huionCore -d &"
+
+spawn-at-startup "mako"
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+prefer-no-csd
+
+environment {
+  DISPLAY ":0"
+  QT_AUTO_SCREEN_SCALE_FACTOR "1"
+  QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+  QT_QPA_PLATFORMTHEME "qt6ct"
+
+  QT_QPA_PLATFORM "wayland"
+  GDK_BACKEND "wayland,x11,*"
+  SDL_VIDEODRIVER "wayland"
+  CLUTTER_BACKEND "wayland"
+
+  XDG_MENU_PREFIX "plasma-"
+  XDG_CURRENT_DESKTOP "niri"
+  XDG_SESSION_DESKTOP "niri"
+  XDG_SESSION_TYPE "wayland"
+  XCURSOR_SIZE "24"
+
+  ELECTRON_OZONE_PLATFORM_HINT "auto"
+}
+
+cursor {
+  xcursor-theme "Bibata-Rainbow-Modern"
+  xcursor-size 24
+}
+
+clipboard {
+  disable-primary
+}
+
 input {
   focus-follows-mouse
-  workspace-auto-back-and-forth
-
+  //workspace-auto-back-and-forth
   mod-key "Super"
 
   keyboard {
     xkb {
-
       layout "us"
       variant "altgr-intl"
       model "pc86"
       options "compose:ralt,caps:escape"
       rules ""
-
     }
 
     repeat-rate 40
-    repeat-delay 200
+    repeat-delay 300
   }
 
   mouse {
-    natural-scroll false
     accel-speed 0.0
     accel-profile "adaptive"
     scroll-factor 1.0
     //scroll-method "no-scroll"
-    scroll-button 273
+    //scroll-button 273
+    //middle-emulation
+  }
 
-    left-handed false
-    middle-emulation true
+  trackpoint {
+  }
+
+  touchpad {
+  }
+
+  tablet {
+    //map-to-output "DP-2"
+    //calibration-matrix 1.0 1.0 1.0 1.0 1.0 1.0
+  }
+
+  touch {
+    //map-to-output "DP-2"
   }
 }
 
-output "DP-2" { }
+output "DP-2" {
+  mode "2560x1080@60.0"
+  scale 1.0
+  position x=1920 y=0
+  focus-at-startup
+}
 
-output "DP-3" { }
+output "DP-3" {
+  mode "2560x1080@60.0"
+  position x=4480 y=-1080
+  transform "270"
+  scale 1.0
+}
 
-output "HDMI-A-1" { }
+output "HDMI-A-1" {
+  mode "1920x1080@60.0"
+  position x=0 y=0
+}
 
-output "HDMI-A-2" { }
+output "HDMI-A-2" {
+  mode "4096x2160@30.0"
+  position x=5560 y=0
+}
 
 
 layout {
-  gaps 16
+  gaps 9
+
+  center-focused-column "never"
 
   default-column-width { proportion 0.5; }
 
   border {
-    on
-
     width 2
   }
 
+  focus-ring {
+    off
+  }
+
   shadow {
+    on
+  }
+
+  tab-indicator {
+    //hide-when-single-tab
+    //place-within-column
+    position "bottom"
+    gap 2
+  }
+
+  insert-hint {
 
   }
+
+  struts { }
 }
 
 binds {
+  // 1.0 - Spawn
+  // -----------
+
   Mod+Return { spawn "kitty"; }
-  Mod+D { spawn "rofi -matching fuzzy -show combi"; }
+  Mod+D {
+    spawn "rofi" "-matching" "fuzzy" "-show" "combi";
+  }
+
+  XF86AudioRaiseVolume {
+    spawn "pamixer" "--allow-boost" "-i" "5"
+  }
+
+  XF86AudioLowerVolume {
+    spawn "pamixer" "--allow-boost" "-d" "5"
+  }
 
   Mod+Q { close-window; }
+
+  // 2.0 - Movement
+  // --------------
+
+  // 2.1 - Window Movement
+  // ---------------------
 
   Mod+Left { focus-column-left; }
   Mod+Down { focus-window-down; }
@@ -87,6 +188,9 @@ binds {
   Mod+End { focus-column-last; }
   Mod+Ctrl+Home { move-column-to-first; }
   Mod+Ctrl+End { move-column-to-last; }
+
+  // 1.2 - Monitor/Workspace Movement
+  // --------------------------------
 
   Mod+bracketleft { focus-monitor-left; }
   Mod+bracketright { focus-monitor-right; }
@@ -117,21 +221,38 @@ binds {
   Mod+Shift+8 { move-column-to-workspace 8; }
   Mod+Shift+9 { move-column-to-workspace 9; }
 
-  Mod+F { maximize-column; }
-  Mod+Shift+F { fullscreen-window }
+  // 3.0 - Actions
+  // -------------
 
-  Mod+Minus { set-column-width "-10%"; }
-  Mod+Equal { set-column-width "+10%"; }
-
-  Mod+Shift+Minus { set-window-height "-10%"; }
-  Mod+Shift+Equal { set-window-height "+10%"; }
-
-  Print { screenshot; }
-
-  Mod+Esc { quit; }
+  Mod+Escape { quit; }
   Ctrl+Alt+Delete { quit; }
 
   Mod+Shift+P { power-off-monitors; }
+
+  Print { screenshot; }
+  Mod+P { screenshot; }
+
+  // 4.0 - Layout
+  // ------------
+
+  Mod+W { toggle-column-tabbed-display; }
+  Mod+backslash { expel-window-from-column; }
+  Mod+Shift+backslash { consume-window-into-column; }
+
+  Mod+V { toggle-window-floating; }
+
+  Mod+C { center-column; }
+  Mod+F { maximize-column; }
+  Mod+Shift+F { fullscreen-window; }
+  Mod+apostrophe { expand-column-to-available-width; }
+  Mod+grave { toggle-overview; }
+  Mod+M { expand-column-to-available-width; }
+
+  Mod+Minus { set-column-width "-5%"; }
+  Mod+Equal { set-column-width "+5%"; }
+
+  Mod+Shift+Minus { set-window-height "-5%"; }
+  Mod+Shift+Equal { set-window-height "+5%"; }
 }
 
 animations {
@@ -141,3 +262,5 @@ animations {
 gestures {
 
 }
+
+include "wallpaper-keys.kdl"
