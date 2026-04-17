@@ -253,11 +253,12 @@ in {
       wallpaperInitScript
     ];
 
-    systemd.user.services.wallpaper-init = mkIf cfg.wallpapers.enable {
+    systemd.user.services.niri-wallpaper-init = mkIf cfg.wallpapers.enable {
       Unit = {
         Description = "Set a random wallpaper on session start";
         After = [ "awww.service" "graphical-session.target" ];
         PartOf = [ "graphical-session.target" ];
+        ConditionEnvironment = "XDG_CURRENT_DESKTOP=niri";
       };
       Service = {
         Type = "oneshot";
