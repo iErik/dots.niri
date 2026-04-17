@@ -9,6 +9,11 @@ self: wallpapers: { pkgs, lib, config, ... }: let
   xdgConfDir = "${homeDirectory}/.config/niri";
   repoUrl = "git@github.com:iErik/dots.niri.git";
 
+  setupNames = map (lib.removeSuffix ".kdl") (builtins.attrNames
+    (lib.filterAttrs
+      (n: v: v == "regular" && lib.hasSuffix ".kdl" n)
+      (builtins.readDir ../setups)));
+
   wallpapersPackage = wallpapers.packages.${pkgs.system}.wallpapers;
   awwwPackage = wallpapers.inputs.awww.packages.${pkgs.system}.awww;
 
@@ -75,6 +80,17 @@ in {
       default = "master";
       description =
         "The branch to use as source for the dotfiles";
+    };
+
+    setup = mkOption {
+      type = types.nullOr (types.enum setupNames);
+      default = null;
+      description =
+        "Which per-machine setup file from the " +
+        "setups/ directory to include alongside " +
+        "the main config. Value must match a file " +
+        "name in setups/ without the .kdl extension. " +
+        "Set to null to not include any.";
     };
 
     wallpapers = {
@@ -251,6 +267,11 @@ in {
         WantedBy = [ "graphical-session.target" ];
       };
     };
+
+    home.file."Dots/Niri.dots/setup.kdl".text =
+      lib.optionalString (cfg.setup != null)
+        ''include "setups/${cfg.setup}.kdl"
+'';
 
     home.file."Dots/Niri.dots/wallpaper-keys.kdl".text =
       lib.optionalString cfg.wallpapers.enable ''
