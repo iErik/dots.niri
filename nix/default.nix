@@ -37,13 +37,13 @@ self: wallpapers: { pkgs, lib, config, ... }: let
   '';
 
   wallpaperScript = pkgs.writeShellApplication {
-    name = "wallpaper-switch";
+    name = "niri-wallpaper-switch";
     runtimeInputs = [ pkgs.jq awwwPackage ];
     text = transitionEnv + builtins.readFile ./wallpaper-switch.sh;
   };
 
   wallpaperInitScript = pkgs.writeShellApplication {
-    name = "wallpaper-init";
+    name = "niri-wallpaper-init";
     runtimeInputs = [ pkgs.jq awwwPackage ];
     text = transitionEnv + builtins.readFile ./wallpaper-init.sh;
   };
@@ -262,7 +262,7 @@ in {
       };
       Service = {
         Type = "oneshot";
-        ExecStart = "${wallpaperInitScript}/bin/wallpaper-init";
+        ExecStart = "${wallpaperInitScript}/bin/niri-wallpaper-init";
       };
       Install = {
         WantedBy = [ "graphical-session.target" ];
@@ -277,10 +277,10 @@ in {
     home.file."Dots/Niri.dots/wallpaper-keys.kdl".text =
       lib.optionalString cfg.wallpapers.enable ''
         binds {
-          Mod+Period { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "image"; }
-          Mod+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "image"; }
-          Mod+Alt+Period { spawn "${wallpaperScript}/bin/wallpaper-switch" "next" "folder"; }
-          Mod+Alt+Comma { spawn "${wallpaperScript}/bin/wallpaper-switch" "prev" "folder"; }
+          Mod+Period { spawn "${wallpaperScript}/bin/niri-wallpaper-switch" "next" "image"; }
+          Mod+Comma { spawn "${wallpaperScript}/bin/niri-wallpaper-switch" "prev" "image"; }
+          Mod+Alt+Period { spawn "${wallpaperScript}/bin/niri-wallpaper-switch" "next" "folder"; }
+          Mod+Alt+Comma { spawn "${wallpaperScript}/bin/niri-wallpaper-switch" "prev" "folder"; }
         }
       '';
 
