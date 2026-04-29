@@ -95,6 +95,13 @@ output "DP-3" {
   scale 1.0
 }
 
+output "DP-1" {
+  mode "2560x1080@60.0"
+  position x=4480 y=-1080
+  transform "270"
+  scale 1.0
+}
+
 output "HDMI-A-1" {
   mode "1920x1080@60.0"
   position x=0 y=0
@@ -137,6 +144,27 @@ layout {
   }
 
   struts { }
+}
+
+blur {
+  passes 3
+  offset 6
+  noise 0.6
+  saturation 1.5
+}
+
+window-rule {
+  match app-id="^kitty$"
+
+  background-effect {
+    blur true
+    xray true
+  }
+}
+
+window-rule {
+  geometry-corner-radius 10
+  clip-to-geometry true
 }
 
 binds {
