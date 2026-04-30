@@ -34,7 +34,6 @@ clipboard {
 
 input {
   focus-follows-mouse
-  //workspace-auto-back-and-forth
   mod-key "Super"
 
   keyboard {
