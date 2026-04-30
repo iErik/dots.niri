@@ -269,12 +269,11 @@ in {
       };
     };
 
-    home.file."Dots/Niri.dots/setup.kdl".text =
+    home.file."${cfg.directory}/setup.kdl".text =
       lib.optionalString (cfg.setup != null)
-        ''include "setups/${cfg.setup}.kdl"
-'';
+        ''include "setups/${cfg.setup}.kdl"'';
 
-    home.file."Dots/Niri.dots/wallpaper-keys.kdl".text =
+    home.file."${cfg.directory}/wallpaper-keys.kdl".text =
       lib.optionalString cfg.wallpapers.enable ''
         binds {
           Mod+Period { spawn "${wallpaperScript}/bin/niri-wallpaper-switch" "next" "image"; }
