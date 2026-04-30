@@ -48,7 +48,7 @@ input {
       layout "us"
       variant "altgr-intl"
       model "pc86"
-      options "compose:ralt,caps:escape"
+      options "compose:menu,caps:escape"
       rules ""
     }
 
@@ -112,7 +112,6 @@ output "HDMI-A-2" {
   position x=5560 y=0
 }
 
-
 layout {
   gaps 9
 
@@ -121,11 +120,15 @@ layout {
   default-column-width { proportion 0.5; }
 
   border {
+    off
     width 2
   }
 
   focus-ring {
-    off
+    on
+    width 2
+    //active-color "#D0FFD0"
+    active-color "#000000"
   }
 
   shadow {
