@@ -1,4 +1,6 @@
-# All-caps variables above this line are injected by Nix.
+# All-caps variables and state helpers above this line are injected by Nix.
+
+state_init
 
 DIRECTION="${1:?Usage: wallpaper-switch <next|prev> <image|folder>}"
 SCOPE="${2:?Usage: wallpaper-switch <next|prev> <image|folder>}"
@@ -111,3 +113,4 @@ AWWW_ARGS=(
 [[ -n "$TRANSITION_INVERT_Y" ]] && AWWW_ARGS+=(--invert-y)
 
 awww img -o "$FOCUSED_OUTPUT" "${AWWW_ARGS[@]}" "$TARGET_PATH"
+state_set "$FOCUSED_OUTPUT" "$TARGET_PATH"

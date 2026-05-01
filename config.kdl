@@ -38,8 +38,7 @@ input {
 
   keyboard {
     xkb {
-      layout "us"
-      variant "altgr-intl"
+      layout "us-esc-grave"
       model "pc86"
       options "compose:ralt,caps:escape"
       rules ""

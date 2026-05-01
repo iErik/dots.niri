@@ -36,16 +36,18 @@ self: wallpapers: { pkgs, lib, config, ... }: let
     FILTER="${filter}"
   '';
 
+  stateHelpers = builtins.readFile ./wallpaper-state.sh;
+
   wallpaperScript = pkgs.writeShellApplication {
     name = "niri-wallpaper-switch";
-    runtimeInputs = [ pkgs.jq awwwPackage ];
-    text = transitionEnv + builtins.readFile ./wallpaper-switch.sh;
+    runtimeInputs = [ pkgs.jq pkgs.util-linux awwwPackage ];
+    text = transitionEnv + stateHelpers + builtins.readFile ./wallpaper-switch.sh;
   };
 
-  wallpaperInitScript = pkgs.writeShellApplication {
-    name = "niri-wallpaper-init";
-    runtimeInputs = [ pkgs.jq awwwPackage ];
-    text = transitionEnv + builtins.readFile ./wallpaper-init.sh;
+  wallpaperDaemonScript = pkgs.writeShellApplication {
+    name = "niri-wallpaper-daemon";
+    runtimeInputs = [ pkgs.jq pkgs.util-linux awwwPackage ];
+    text = transitionEnv + stateHelpers + builtins.readFile ./wallpaper-daemon.sh;
   };
 
 in {
@@ -250,19 +252,21 @@ in {
       pkgs.mako
     ] ++ lib.optionals cfg.wallpapers.enable [
       wallpaperScript
-      wallpaperInitScript
+      wallpaperDaemonScript
     ];
 
-    systemd.user.services.niri-wallpaper-init = mkIf cfg.wallpapers.enable {
+    systemd.user.services.niri-wallpaper-daemon = mkIf cfg.wallpapers.enable {
       Unit = {
-        Description = "Set a random wallpaper on session start";
+        Description = "Restore and maintain per-output wallpapers";
         After = [ "awww.service" "graphical-session.target" ];
         PartOf = [ "graphical-session.target" ];
         ConditionEnvironment = "XDG_CURRENT_DESKTOP=niri";
       };
       Service = {
-        Type = "oneshot";
-        ExecStart = "${wallpaperInitScript}/bin/niri-wallpaper-init";
+        Type = "simple";
+        ExecStart = "${wallpaperDaemonScript}/bin/niri-wallpaper-daemon";
+        Restart = "on-failure";
+        RestartSec = 5;
       };
       Install = {
         WantedBy = [ "graphical-session.target" ];
