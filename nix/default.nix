@@ -1,7 +1,7 @@
 self: wallpapers: { pkgs, lib, config, ... }: let
 
   inherit (lib) mkOption mkIf types;
-  inherit (lib.hm.dag) entryAfter;
+  inherit (lib.hm.dag) entryBefore;
   inherit (config.home) username homeDirectory;
 
   cfg = config.dots.niri;
