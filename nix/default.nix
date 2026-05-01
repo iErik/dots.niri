@@ -284,7 +284,7 @@ in {
       '';
 
     home.activation.niriSetup = mkIf cfg.cloneConfig
-      (entryAfter ["writeBoundary"] ''
+      (entryBefore ["checkLinkTargets"] ''
         export PATH=${pkgs.openssh}/bin:$PATH
         export PATH=${pkgs.git}/bin:$PATH
 
